@@ -7,6 +7,7 @@ import cors from "cors";
 import mongoose from "mongoose";
 
 import router from "./router";
+require("dotenv").config();
 
 const app = express();
 
@@ -22,15 +23,12 @@ app.use(bodyParser.json());
 
 const server = http.createServer(app);
 
-server.listen(8080, () => {
-  console.log("server running on http://localhost:8080/");
+server.listen(process.env.PORT, () => {
+  console.log(`server running on http://localhost:${8080}/`);
 });
 
-const MONGO_URL =
-  "mongodb+srv://210010059:t4a9JxZPBiJP3X9a@cluster0.hetwdr9.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
-
 mongoose.Promise = Promise;
-mongoose.connect(MONGO_URL);
+mongoose.connect(process.env.MONGO_URL);
 
 mongoose.connection.on("error", (error: Error) => console.log(error));
 
