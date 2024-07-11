@@ -1,6 +1,7 @@
 import express from "express";
 import { createUser, getUserByEmail } from "../db/users";
 import { random, authentication } from "../helpers";
+import { createBook, getBooksByTitle } from "../db/books";
 
 export const login = async (req: express.Request, res: express.Response) => {
   try {
@@ -69,6 +70,36 @@ export const register = async (req: express.Request, res: express.Response) => {
     });
 
     return res.status(200).json(user).end();
+  } catch (error) {
+    console.log(error);
+    return res.sendStatus(400);
+  }
+};
+
+export const createBookController = async (req: express.Request, res: express.Response) => {
+  try {
+    const { title, author, publishedDate, copiesAvailable, genre, summary } = req.body;
+
+    if (!title || !author || !publishedDate || !copiesAvailable || !genre || !summary) {
+      return res.sendStatus(400);
+    }
+
+    const existingBook = await getBooksByTitle(title);
+
+    if (existingBook) {
+      return res.sendStatus(400);
+    }
+
+    const book = await createBook({
+      title,
+      author,
+      publishedDate,
+      copiesAvailable,
+      genre,
+      summary
+    });
+
+    return res.status(200).json(book).end();
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);
