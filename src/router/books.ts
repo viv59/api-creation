@@ -11,7 +11,7 @@ import {
 import { isAuthenticated } from "../middlewares";
 
 export default (router: express.Router) => {
-  router.get("/books",isAuthenticated ,getAllBooks);
+  router.get("/books",getAllBooks);
   router.get("/books/:id",isAuthenticated ,getBookByIdController);
   router.get("/books/author/:author",isAuthenticated ,getBooksByAuthorController);
   router.get("/books/title/:title",isAuthenticated ,getBooksByTitleController);

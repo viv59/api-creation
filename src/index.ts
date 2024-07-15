@@ -14,6 +14,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
+    origin: 'http://localhost:3000' // Allow requests from your React app
   })
 );
 
@@ -24,7 +25,7 @@ app.use(bodyParser.json());
 const server = http.createServer(app);
 
 server.listen(process.env.PORT, () => {
-  console.log(`server running on http://localhost:${8080}/`);
+  console.log(`server running on http://localhost:${process.env.PORT}/`);
 });
 
 mongoose.Promise = Promise;

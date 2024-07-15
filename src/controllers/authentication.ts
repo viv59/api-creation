@@ -84,9 +84,9 @@ export const createBookController = async (req: express.Request, res: express.Re
       return res.sendStatus(400);
     }
 
-    const existingBook = await getBooksByTitle(title);
+    const existingBooks = await getBooksByTitle(title);
 
-    if (existingBook) {
+    if (existingBooks.length > 0) {
       return res.sendStatus(400);
     }
 
@@ -96,7 +96,7 @@ export const createBookController = async (req: express.Request, res: express.Re
       publishedDate,
       copiesAvailable,
       genre,
-      summary
+      summary,
     });
 
     return res.status(200).json(book).end();
