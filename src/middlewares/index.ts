@@ -2,6 +2,7 @@ import express from "express";
 import { get, identity, merge } from "lodash";
 
 import { getUserBySessionToken } from "../db/users";
+require("dotenv").config();
 
 export const isOwner = async (
   req: express.Request,
@@ -33,7 +34,7 @@ export const isAuthenticated = async (
   next: express.NextFunction
 ) => {
   try {
-    const sessionToken = req.cookies["VIVEK-AUTH"];
+    const sessionToken = req.cookies[process.env.SECRET_COOKIE];
 
     if (!sessionToken) {
       return res.sendStatus(403);

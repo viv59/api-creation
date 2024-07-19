@@ -1,9 +1,7 @@
 import express from "express";
 import { createUser, getUserByEmail } from "../db/users";
 import { random, authentication } from "../helpers";
-import { createBook, getBooksByTitle } from "../db/books";
-import { createResource, getResourcesByName } from "../db/resources";
-import { get } from "lodash";
+require("dotenv").config();
 
 export const login = async (req: express.Request, res: express.Response) => {
   try {
@@ -35,7 +33,7 @@ export const login = async (req: express.Request, res: express.Response) => {
 
     await user.save();
 
-    res.cookie("VIVEK-AUTH", user.authentication.sessionToken, {
+    res.cookie(process.env.SECRET_COOKIE, user.authentication.sessionToken, {
       domain: "localhost",
       path: "/",
     });

@@ -9,8 +9,8 @@ const UserSchema = new mongoose.Schema({
     sessionToken: { type: String, select: false },
   },
   role: { type: String, default: "user" },
-  ownedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }],
-  OwnedBooksNames: [{ type: String }],
+  // ownedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }],
+  // OwnedBooksNames: [{ type: String }],
   borrowedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Books" }],
   checkedOutResources: [
     { type: mongoose.Schema.Types.ObjectId, ref: "Resource" },

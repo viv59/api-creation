@@ -8,8 +8,9 @@ export const getAllUsers = async (
 ) => {
   try {
     const users = await getUsers();
+    const filteredUsers = users.filter(user => user.role === 'user');
 
-    return res.status(200).json(users);
+    return res.status(200).json(filteredUsers);
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);
