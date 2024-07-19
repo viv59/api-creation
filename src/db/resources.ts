@@ -34,14 +34,16 @@ const ResourceSchema = new mongoose.Schema({
   location: { type: String, required: true },
   availability: { type: Boolean, default: true },
   description: { type: String },
-  // createdAt: { type: Date, default: Date.now },
+  createdAt: { type: Date, default: Date.now },
+  checkedOutBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 
 export const ResourceModel = mongoose.model("Resource", ResourceSchema);
 
 export const getResources = () => ResourceModel.find();
 
-export const getResourcesByName = (name: string) => ResourceModel.find({ name });
+export const getResourcesByName = (name: string) =>
+  ResourceModel.find({ name });
 
 export const getResourceById = (id: string) => ResourceModel.findById(id);
 

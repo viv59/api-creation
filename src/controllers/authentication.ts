@@ -3,6 +3,7 @@ import { createUser, getUserByEmail } from "../db/users";
 import { random, authentication } from "../helpers";
 import { createBook, getBooksByTitle } from "../db/books";
 import { createResource, getResourcesByName } from "../db/resources";
+import { get } from "lodash";
 
 export const login = async (req: express.Request, res: express.Response) => {
   try {
@@ -77,80 +78,80 @@ export const register = async (req: express.Request, res: express.Response) => {
   }
 };
 
-export const createBookController = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  try {
-    const { title, author, publishedDate, copiesAvailable, genre, summary } =
-      req.body;
+// export const createBookController = async (
+//   req: express.Request,
+//   res: express.Response
+// ) => {
+//   try {
+//     const { title, author, publishedDate, copiesAvailable, genre, summary } =
+//       req.body;
 
-    if (
-      !title ||
-      !author ||
-      !publishedDate ||
-      !copiesAvailable ||
-      !genre ||
-      !summary
-    ) {
-      return res.sendStatus(400);
-    }
+//     const userId = get(req, "identity._id") as string;
+//     const ownerUsername = get(req, "identity.username") as string;
 
-    const existingBooks = await getBooksByTitle(title);
+//     if (
+//       !title ||
+//       !author ||
+//       !publishedDate ||
+//       !copiesAvailable ||
+//       !genre ||
+//       !summary
+//     ) {
+//       return res.sendStatus(400);
+//     }
 
-    if (existingBooks.length > 0) {
-      return res.sendStatus(400);
-    }
+//     const existingBooks = await getBooksByTitle(title);
 
-    const book = await createBook({
-      title,
-      author,
-      publishedDate,
-      copiesAvailable,
-      genre,
-      summary,
-    });
+//     if (existingBooks.length > 0) {
+//       return res.sendStatus(400).json({ message: "Book already exists" });
+//     }
 
-    return res.status(200).json(book).end();
-  } catch (error) {
-    console.log(error);
-    return res.sendStatus(400);
-  }
-};
+//     const book = await createBook({
+//       title,
+//       author,
+//       publishedDate,
+//       copiesAvailable,
+//       genre,
+//       summary,
+//       owner: userId,
+//       ownerUsername: ownerUsername,
+//     });
 
-export const createResourceController = async (
-  req: express.Request,
-  res: express.Response
-) => {
-  try {
-    const { name, type, description, availability, location } = req.body;
+//     return res.status(200).json(book).end();
+//   } catch (error) {
+//     console.log(error);
+//     return res.sendStatus(400);
+//   }
+// };
 
-    if (
-      !name ||
-      !type ||
-      !description ||
-      !availability === undefined
-    ) {
-      return res.sendStatus(400);
-    }
+// export const createResourceController = async (
+//   req: express.Request,
+//   res: express.Response
+// ) => {
+//   try {
+//     const { name, type, description, availability, location } = req.body;
 
-    const existingResources = await getResourcesByName(name);
+//     if (!name || !type || !description || !availability === undefined) {
+//       return res.sendStatus(400);
+//     }
 
-    if (existingResources.length > 0) {
-      return res.sendStatus(400);
-    }
+//     const existingResources = await getResourcesByName(name);
 
-    const resource = await createResource({
-      name,
-      type,
-      description,
-      availability,
-      location,
-    });
+//     if (existingResources.length > 0) {
+//       return res.sendStatus(400);
+//     }
 
-    return res.status(200).json(resource).end();
-  } catch (error) {
-    console.log(error);
-    return res.sendStatus(400);
-  }
-};
+//     const resource = await createResource({
+//       name,
+//       type,
+//       description,
+//       availability,
+//       location,
+//     });
+
+//     return res.status(200).json(resource).end();
+//   } catch (error) {
+//     console.log(error);
+//     return res.sendStatus(400);
+//   }
+// };

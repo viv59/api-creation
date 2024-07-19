@@ -1,8 +1,8 @@
 import express from "express";
 
 import {
-  createBookController,
-  createResourceController,
+  // createBookController,
+  // createResourceController,
   login,
   register,
 } from "../controllers/authentication";
@@ -10,6 +10,6 @@ import {
 export default (router: express.Router) => {
   router.post("/auth/register", register);
   router.post("/auth/login", login);
-  router.post("/auth/createbook", createBookController);
-  router.post("/auth/createresource",createResourceController);
+  // router.post("/auth/createbook", createBookController);
+  // router.post("/auth/createresource",createResourceController);
 };

@@ -8,7 +8,13 @@ const UserSchema = new mongoose.Schema({
     salt: { type: String, select: false },
     sessionToken: { type: String, select: false },
   },
-  role: {type: String, default: "user"},
+  role: { type: String, default: "user" },
+  ownedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Book" }],
+  OwnedBooksNames: [{ type: String }],
+  borrowedBooks: [{ type: mongoose.Schema.Types.ObjectId, ref: "Books" }],
+  checkedOutResources: [
+    { type: mongoose.Schema.Types.ObjectId, ref: "Resource" },
+  ],
 });
 
 export const UserModel = mongoose.model("User", UserSchema);

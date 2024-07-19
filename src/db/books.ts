@@ -7,6 +7,9 @@ const BookSchema = new mongoose.Schema({
   copiesAvailable: { type: Number, default: 1 },
   genre: { type: String },
   summary: { type: String },
+  // owner: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
+  // ownerUsername: { type: String },
+  borrowedBy: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}]
 });
 
 export const BookModel = mongoose.model("Book", BookSchema);
