@@ -13,8 +13,8 @@ export const validateBookCreation = [
   body("copiesAvailable")
     .isInt({ min: 1 })
     .withMessage("Copies Available must be a positive integer"),
-//   body("genre").notEmpty().withMessage("Genre is required"),
-//   body("summary").notEmpty().withMessage("Summary is required"),
+  body("genre").notEmpty().withMessage("Genre is required"),
+  //   body("summary").notEmpty().withMessage("Summary is required"),
 ];
 
 export const validateBookUpdate = [

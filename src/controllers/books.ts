@@ -142,7 +142,7 @@ export const deleteBookController = async (
     return res.status(200).json(deletedBook);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400).send("Error deleting book");
+    return res.status(500).send("Error deleting book");
   }
 };
 
@@ -221,8 +221,9 @@ export const createBookController = async (
     });
     return res.status(201).json(book).end();
   } catch (error) {
-    console.log(error);
-    return res.sendStatus(400).send("Error creating book");
+    // console.log(error);
+    // return res.sendStatus(400).send("Error creating book");
+    return res.status(500);
   }
 };
 
