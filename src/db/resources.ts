@@ -60,3 +60,21 @@ export const updateResourceById = (id: string, values: Record<string, any>) =>
 
 export const getResourcesByType = (type: string) =>
   ResourceModel.find({ type });
+
+export const getResourcesByLocation = (location: string) =>
+  ResourceModel.find({ location });
+
+export const getAllResourceNames = async () => {
+  const names = await ResourceModel.distinct("name");
+  return names;
+};
+
+export const getAllResourceTypes = async () => {
+  const types = await ResourceModel.distinct("type");
+  return types;
+};
+
+export const getAllResourceLocations = async () => {
+  const locations = await ResourceModel.distinct("location");
+  return locations;
+};

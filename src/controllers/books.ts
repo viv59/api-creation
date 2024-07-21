@@ -7,12 +7,15 @@ import {
   getBooksByGenre,
   deleteBookById,
   createBook,
-  updateBookById,
   BookModel,
+  getAllAuthors,
+  getAllTitles,
+  getAllGenres,
 } from "../db/books";
 import { get } from "lodash";
 import { UserModel } from "../db/users";
 import mongoose from "mongoose";
+import { validationResult } from "express-validator";
 
 export const getAllBooks = async (
   req: express.Request,
@@ -23,7 +26,7 @@ export const getAllBooks = async (
     return res.status(200).json(books);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.sendStatus(400).send("Error fetching books");
   }
 };
 
@@ -32,15 +35,20 @@ export const getBookByIdController = async (
   res: express.Response
 ) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const { id } = req.params;
     const book = await getBookById(id);
     if (!book) {
-      return res.sendStatus(404);
+      return res.sendStatus(404).send("Book not found");
     }
     return res.status(200).json(book);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.sendStatus(400).send("Error fetching book by ID");
   }
 };
 
@@ -51,10 +59,20 @@ export const getBooksByAuthorController = async (
   try {
     const { author } = req.params;
     const books = await getBooksByAuthor(author);
+
+    if (books.length === 0) {
+      const availableAuthors = await getAllAuthors();
+      return res.status(404).json({
+        message: `Author not found. Available authors are: ${availableAuthors.join(
+          ", "
+        )}`,
+      });
+    }
+
     return res.status(200).json(books);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.sendStatus(400).send("Error fetching books by author");
   }
 };
 
@@ -65,10 +83,20 @@ export const getBooksByTitleController = async (
   try {
     const { title } = req.params;
     const books = await getBooksByTitle(title);
+
+    if (books.length === 0) {
+      const availableTitles = await getAllTitles();
+      return res.status(404).json({
+        message: `Title not found. Available titles are: ${availableTitles.join(
+          ", "
+        )}`,
+      });
+    }
+
     return res.status(200).json(books);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.sendStatus(400).send("Error fetching by title");
   }
 };
 
@@ -79,10 +107,20 @@ export const getBooksByGenreController = async (
   try {
     const { genre } = req.params;
     const books = await getBooksByGenre(genre);
+
+    if (books.length === 0) {
+      const availableGenres = await getAllGenres();
+      return res.status(404).json({
+        message: `Genre not found. Available genres are: ${availableGenres.join(
+          ", "
+        )}`,
+      });
+    }
+
     return res.status(200).json(books);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.sendStatus(400).send("Erro fetching by genre");
   }
 };
 
@@ -91,15 +129,20 @@ export const deleteBookController = async (
   res: express.Response
 ) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const { id } = req.params;
     const deletedBook = await deleteBookById(id);
     if (!deletedBook) {
-      return res.sendStatus(404);
+      return res.sendStatus(404).send("Book not found");
     }
     return res.status(200).json(deletedBook);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.sendStatus(400).send("Error deleting book");
   }
 };
 
@@ -108,6 +151,11 @@ export const updateBookController = async (
   res: express.Response
 ) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const { id } = req.params;
     const { title, author, publishedDate, copiesAvailable, genre, summary } =
       req.body;
@@ -138,21 +186,23 @@ export const createBookController = async (
   res: express.Response
 ) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const { title, author, publishedDate, copiesAvailable, genre, summary } =
       req.body;
-
-    // const userId = get(req, "identity._id") as string;
-    // const ownerUsername = get(req, "identity.username") as string;
 
     if (
       !title ||
       !author ||
       !publishedDate ||
       !copiesAvailable ||
-      !genre ||
-      !summary
+      !genre
+      // !summary
     ) {
-      return res.sendStatus(400);
+      return res.sendStatus(400).send("Missing required book information");
     }
 
     const existingBooks = await getBooksByTitle(title);
@@ -168,21 +218,11 @@ export const createBookController = async (
       copiesAvailable,
       genre,
       summary,
-      // owner: userId,
-      // ownerUsername: ownerUsername,
     });
-
-    // await UserModel.findByIdAndUpdate(userId, {
-    //   $push: {
-    //     ownedBooks: book._id,
-    //     OwnedBooksNames: book.title,
-    //   },
-    // });
-
     return res.status(200).json(book).end();
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.sendStatus(400).send("Error creating book");
   }
 };
 
@@ -191,6 +231,11 @@ export const borrowBook = async (
   res: express.Response
 ) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const userId = get(req, "identity._id") as string;
     const userObjectId = new mongoose.Types.ObjectId(userId);
     const { bookId } = req.params;
@@ -239,6 +284,11 @@ export const returnBook = async (
   res: express.Response
 ) => {
   try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
     const userId: string = get(req, "identity._id") as string;
     const userObjectId = new mongoose.Types.ObjectId(userId);
     const { bookId } = req.params;

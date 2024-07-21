@@ -5,11 +5,9 @@ const BookSchema = new mongoose.Schema({
   author: { type: String, required: true },
   publishedDate: { type: Date, required: true },
   copiesAvailable: { type: Number, default: 1 },
-  genre: { type: String },
-  summary: { type: String },
-  // owner: { type: mongoose.Schema.Types.ObjectId, ref: "User"},
-  // ownerUsername: { type: String },
-  borrowedBy: [{type: mongoose.Schema.Types.ObjectId, ref: "User"}]
+  genre: { type: String, required: true },
+  summary: { type: String, default: "Empty" },
+  borrowedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 });
 
 export const BookModel = mongoose.model("Book", BookSchema);
@@ -34,3 +32,18 @@ export const updateBookById = (id: string, values: Record<string, any>) =>
   BookModel.findByIdAndUpdate(id, values, { new: true }).then((book) =>
     book.toObject()
   );
+
+export const getAllAuthors = async () => {
+  const authors = await BookModel.distinct("author");
+  return authors;
+};
+
+export const getAllTitles = async () => {
+  const titles = await BookModel.distinct("title");
+  return titles;
+};
+
+export const getAllGenres = async () => {
+  const genres = await BookModel.distinct("genre");
+  return genres;
+};

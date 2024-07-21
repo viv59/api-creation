@@ -5,15 +5,14 @@ import dotenv from "dotenv";
 
 dotenv.config();
 // MongoDB connection string (make sure to replace with your actual connection string)
-const mongoUri =
-  process.env.MONGO_URL || "mongodb://localhost:27017/your-database-name";
+const mongoUri = process.env.MONGO_URL;
 
 const createAdminUser = async () => {
   await mongoose.connect(mongoUri);
 
-  const email = "admin@example.com";
-  const password = "password";
-  const username = "admin";
+  const email = process.env.ADMIN_EMAIL;
+  const password = process.env.ADMIN_PASSWORD;
+  const username = process.env.ADMIN_USERNAME;
 
   const existingUser = await getUserByEmail(email);
 

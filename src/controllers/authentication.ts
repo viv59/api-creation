@@ -1,28 +1,31 @@
 import express from "express";
 import { createUser, getUserByEmail } from "../db/users";
 import { random, authentication } from "../helpers";
+import { validationResult } from "express-validator";
 require("dotenv").config();
 
 export const login = async (req: express.Request, res: express.Response) => {
   try {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-      return res.sendStatus(400);
+    // Handle validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
+
+    const { email, password } = req.body;
 
     const user = await getUserByEmail(email).select(
       "+authentication.salt +authentication.password"
     );
 
     if (!user) {
-      return res.sendStatus(400);
+      return res.status(400).send("Invalid email or password");
     }
 
     const expectedHash = authentication(user.authentication.salt, password);
 
     if (user.authentication.password !== expectedHash) {
-      return res.sendStatus(403);
+      return res.status(403).send("Invalid email or password");
     }
 
     const salt = random();
@@ -41,22 +44,24 @@ export const login = async (req: express.Request, res: express.Response) => {
     return res.status(200).json(user).end();
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.status(500).send("Internal server error");
   }
 };
 
 export const register = async (req: express.Request, res: express.Response) => {
   try {
-    const { email, password, username } = req.body;
-
-    if (!email || !password || !username) {
-      return res.sendStatus(400);
+    // Handle validation errors
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
+
+    const { email, password, username } = req.body;
 
     const existingUser = await getUserByEmail(email);
 
     if (existingUser) {
-      return res.sendStatus(400);
+      return res.status(400).send("Email already in use");
     }
 
     const salt = random();
@@ -72,84 +77,6 @@ export const register = async (req: express.Request, res: express.Response) => {
     return res.status(200).json(user).end();
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.status(500).send("Internal server error");
   }
 };
-
-// export const createBookController = async (
-//   req: express.Request,
-//   res: express.Response
-// ) => {
-//   try {
-//     const { title, author, publishedDate, copiesAvailable, genre, summary } =
-//       req.body;
-
-//     const userId = get(req, "identity._id") as string;
-//     const ownerUsername = get(req, "identity.username") as string;
-
-//     if (
-//       !title ||
-//       !author ||
-//       !publishedDate ||
-//       !copiesAvailable ||
-//       !genre ||
-//       !summary
-//     ) {
-//       return res.sendStatus(400);
-//     }
-
-//     const existingBooks = await getBooksByTitle(title);
-
-//     if (existingBooks.length > 0) {
-//       return res.sendStatus(400).json({ message: "Book already exists" });
-//     }
-
-//     const book = await createBook({
-//       title,
-//       author,
-//       publishedDate,
-//       copiesAvailable,
-//       genre,
-//       summary,
-//       owner: userId,
-//       ownerUsername: ownerUsername,
-//     });
-
-//     return res.status(200).json(book).end();
-//   } catch (error) {
-//     console.log(error);
-//     return res.sendStatus(400);
-//   }
-// };
-
-// export const createResourceController = async (
-//   req: express.Request,
-//   res: express.Response
-// ) => {
-//   try {
-//     const { name, type, description, availability, location } = req.body;
-
-//     if (!name || !type || !description || !availability === undefined) {
-//       return res.sendStatus(400);
-//     }
-
-//     const existingResources = await getResourcesByName(name);
-
-//     if (existingResources.length > 0) {
-//       return res.sendStatus(400);
-//     }
-
-//     const resource = await createResource({
-//       name,
-//       type,
-//       description,
-//       availability,
-//       location,
-//     });
-
-//     return res.status(200).json(resource).end();
-//   } catch (error) {
-//     console.log(error);
-//     return res.sendStatus(400);
-//   }
-// };

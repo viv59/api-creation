@@ -1,4 +1,5 @@
 import express from "express";
+import { validateBookBorrowReturn, validateBookCreation, validateBookId, validateBookUpdate } from "../middlewares/bookValidators";
 import {
   getAllBooks,
   getBookByIdController,
@@ -15,9 +16,9 @@ import { isAdmin, isAuthenticated } from "../middlewares";
 // import { createBookController } from "../controllers/authentication";
 
 export default (router: express.Router) => {
-  router.post("/createbook", isAuthenticated, isAdmin, createBookController);
+  router.post("/createbook", isAuthenticated, isAdmin, validateBookCreation,createBookController);
   router.get("/books", isAuthenticated, getAllBooks);
-  router.get("/books/:id", isAuthenticated, getBookByIdController);
+  router.get("/books/:id", isAuthenticated, validateBookId,getBookByIdController);
   router.get(
     "/books/author/:author",
     isAuthenticated,
@@ -25,8 +26,8 @@ export default (router: express.Router) => {
   );
   router.get("/books/title/:title", isAuthenticated, getBooksByTitleController);
   router.get("/books/genre/:genre", isAuthenticated, getBooksByGenreController);
-  router.delete("/books/:id", isAuthenticated, isAdmin, deleteBookController);
-  router.patch("/books/:id", isAuthenticated, isAdmin, updateBookController);
-  router.post("/books/borrow/:bookId", isAuthenticated, borrowBook);
-  router.post("/books/return/:bookId", isAuthenticated, returnBook);
+  router.delete("/books/:id", isAuthenticated, isAdmin, validateBookId,deleteBookController);
+  router.patch("/books/:id", isAuthenticated, isAdmin, validateBookUpdate,updateBookController);
+  router.post("/books/borrow/:bookId", isAuthenticated, validateBookBorrowReturn,borrowBook);
+  router.post("/books/return/:bookId", isAuthenticated, validateBookBorrowReturn,returnBook);
 };

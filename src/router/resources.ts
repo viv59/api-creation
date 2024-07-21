@@ -7,17 +7,25 @@ import {
   deleteResource,
   getAllResources,
   getResourceByIdController,
+  getResourcesByLocationController,
   getResourcesByNameController,
   getResourcesByTypeController,
   returnResource,
   updateResource,
 } from "../controllers/resources";
+import {
+  validateResourceBorrowReturn,
+  validateResourceCreation,
+  validateResourceId,
+  validateResourceUpdate,
+} from "../middlewares/resourceValidators";
 
 export default (router: express.Router) => {
   router.post(
     "/createresource",
     isAuthenticated,
     isAdmin,
+    validateResourceCreation,
     createResourceController
   );
   router.get("/resources", isAuthenticated, getAllResources);
@@ -26,15 +34,47 @@ export default (router: express.Router) => {
     isAuthenticated,
     getResourcesByNameController
   );
-  router.get("/resources/:id", isAuthenticated, getResourceByIdController);
+  router.get(
+    "/resources/:id",
+    isAuthenticated,
+    validateResourceId,
+    getResourceByIdController
+  );
   router.get(
     "/resources/type/:type",
     isAuthenticated,
     getResourcesByTypeController
   );
-  router.patch("/resources/:id", isAuthenticated, isAdmin, updateResource);
-  router.delete("/resources/:id", isAuthenticated, isAdmin, deleteResource);
+  router.get(
+    "/resources/location/:location",
+    isAuthenticated,
+    getResourcesByLocationController
+  );
+  router.patch(
+    "/resources/:id",
+    isAuthenticated,
+    isAdmin,
+    validateResourceUpdate,
+    updateResource
+  );
+  router.delete(
+    "/resources/:id",
+    isAuthenticated,
+    isAdmin,
+    validateResourceId,
+    deleteResource
+  );
 
-  router.post("/resources/borrow/:resourceId",isAuthenticated,borrowResource);
-  router.post("/resources/return/:resourceId",isAuthenticated,returnResource)
+  router.post(
+    "/resources/borrow/:resourceId",
+    isAuthenticated,
+    validateResourceBorrowReturn,
+    borrowResource
+  );
+  router.post(
+    "/resources/return/:resourceId",
+    isAuthenticated,
+    validateResourceBorrowReturn,
+    returnResource
+  );
 };
