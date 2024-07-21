@@ -219,7 +219,7 @@ export const createBookController = async (
       genre,
       summary,
     });
-    return res.status(200).json(book).end();
+    return res.status(201).json(book).end();
   } catch (error) {
     console.log(error);
     return res.sendStatus(400).send("Error creating book");

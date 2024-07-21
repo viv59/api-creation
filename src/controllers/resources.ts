@@ -143,7 +143,7 @@ export const getResourcesByNameController = async (
     return res.status(200).json(resources);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400).send("Error fetching resources by name");
+    return res.sendStatus(500).send("Error fetching resources by name");
   }
 };
 
@@ -167,7 +167,7 @@ export const getResourcesByTypeController = async (
     return res.status(200).json(resources);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400).send("Error fetching resources by type");
+    return res.sendStatus(500).send("Error fetching resources by type");
   }
 };
 export const createResourceController = async (
@@ -186,7 +186,7 @@ export const createResourceController = async (
     if (
       !name ||
       !type ||
-      !description ||
+      // !description ||
       availability === undefined ||
       !location
     ) {
@@ -208,7 +208,7 @@ export const createResourceController = async (
       location,
     });
 
-    return res.status(200).json(resource);
+    return res.status(201).json(resource);
   } catch (error) {
     console.error("Error creating resource:", error);
     return res.status(500).json({ message: "Internal server error" });

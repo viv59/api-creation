@@ -40,7 +40,7 @@ export const validateResourceCreation = [
     .withMessage(
       `Type must be one of the following: ${allowedTypes.join(", ")}`
     ),
-  body("description").notEmpty().withMessage("Description is required"),
+  // body("description").notEmpty().withMessage("Description is required"),
   body("availability")
     .isBoolean()
     .withMessage("Availability is required and must be a boolean"),

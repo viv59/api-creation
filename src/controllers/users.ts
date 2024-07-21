@@ -13,7 +13,7 @@ export const getAllUsers = async (
     return res.status(200).json(filteredUsers);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.status(500).send("Error fetching books");
   }
 };
 
@@ -29,7 +29,7 @@ export const deleteUser = async (
     return res.json(deleteUser);
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.status(500).send("Error deleting user");
   }
 };
 
@@ -52,6 +52,6 @@ export const updateUser = async (
     return res.status(200).json(user).end();
   } catch (error) {
     console.log(error);
-    return res.sendStatus(400);
+    return res.status(500).send("Error updating user credintials");
   }
 };

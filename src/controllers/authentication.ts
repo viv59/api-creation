@@ -80,3 +80,11 @@ export const register = async (req: express.Request, res: express.Response) => {
     return res.status(500).send("Internal server error");
   }
 };
+
+export const logout = (req: express.Request, res: express.Response) => {
+  res.clearCookie(process.env.SECRET_COOKIE, {
+    domain: 'localhost',
+    path: '/',
+  });
+  return res.status(200).send('Logged out successfully');
+};

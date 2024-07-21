@@ -5,12 +5,14 @@ import {
   // createBookController,
   // createResourceController,
   login,
+  logout,
   register,
 } from "../controllers/authentication";
 
 export default (router: express.Router) => {
   router.post("/auth/register", validateRegister,register);
   router.post("/auth/login", validateLogin,login);
+  router.post("/auth/logout",logout);
   // router.post("/auth/createbook", createBookController);
   // router.post("/auth/createresource",createResourceController);
 };
