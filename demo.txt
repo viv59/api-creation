@@ -1,14 +1,1 @@
-admin@example.com
-password
 
-vivek0@gmail.com
-xyz
-
-"email": "vivek100@example.com",
-"password": "password-xyz",
-"username": "vivek100"
-
-npx jest --watch
-npm test --watch
-
-npm test -- --testPathPattern=tests/book.test.ts
