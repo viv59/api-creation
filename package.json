@@ -6,10 +6,11 @@
   "scripts": {
     "start": "nodemon",
     "test": "jest",
+    "build": "tsc",
     "create-admin": "ts-node src/scripts/createAdminUser.ts"
   },
   "keywords": [],
-  "author": "",
+  "author": "Vivek Gaikwad",
   "license": "ISC",
   "devDependencies": {
     "@types/body-parser": "^1.19.5",

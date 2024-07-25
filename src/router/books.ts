@@ -17,7 +17,7 @@ import { isAdmin, isAuthenticated } from "../middlewares";
 
 export default (router: express.Router) => {
   router.post("/createbook", isAuthenticated, isAdmin, validateBookCreation,createBookController);
-  router.get("/books", isAuthenticated, getAllBooks);
+  router.get("/books", getAllBooks);
   router.get("/books/:id", isAuthenticated, validateBookId,getBookByIdController);
   router.get(
     "/books/author/:author",
