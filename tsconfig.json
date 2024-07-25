@@ -3,9 +3,9 @@
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "baseUrl": "src",
-    "outDir": "public",
+    "outDir": "dist",
     "sourceMap": true,
     "noImplicitAny": true
   },
-  "include": ["src/**/*"]
+  "include": ["./api/*.ts","src/**/*"]
 }

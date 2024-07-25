@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon",
+    "start": "ts-node src/index.ts",
+    "dev": "nodemon",
     "test": "jest",
     "build": "tsc",
-    "create-admin": "ts-node src/scripts/createAdminUser.ts"
+    "create-admin": "ts-node src/scripts/createAdminUser.ts",
+    "vercel-build": "echo hello"
   },
   "keywords": [],
   "author": "Vivek Gaikwad",
