@@ -332,3 +332,20 @@ export const getResourcesByLocationController = async (
     return res.status(500).send("Error fetching resources by location");
   }
 };
+
+export const getRandomResource = async (req: express.Request, res: express.Response) => {
+  try {
+    const count = await ResourceModel.countDocuments();
+    const random = Math.floor(Math.random() * count);
+    const randomResource = await ResourceModel.findOne().skip(random);
+
+    if (!randomResource) {
+      return res.status(404).send("No resources found");
+    }
+
+    return res.status(200).json(randomResource);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal server error");
+  }
+};

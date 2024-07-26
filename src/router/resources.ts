@@ -6,6 +6,7 @@ import {
   createResourceController,
   deleteResource,
   getAllResources,
+  getRandomResource,
   getResourceByIdController,
   getResourcesByLocationController,
   getResourcesByNameController,
@@ -28,7 +29,7 @@ export default (router: express.Router) => {
     validateResourceCreation,
     createResourceController
   );
-  router.get("/resources", isAuthenticated, getAllResources);
+  router.get("/resources", getAllResources);
   router.get(
     "/resources/name/:name",
     isAuthenticated,
@@ -50,6 +51,7 @@ export default (router: express.Router) => {
     isAuthenticated,
     getResourcesByLocationController
   );
+  router.get("/randomresource",isAuthenticated,getRandomResource)
   router.patch(
     "/resources/:id",
     isAuthenticated,

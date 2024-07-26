@@ -326,3 +326,23 @@ export const returnBook = async (
     return res.status(500).send("Internal server error");
   }
 };
+
+export const getRandomBook = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const count = await BookModel.countDocuments();
+    const random = Math.floor(Math.random() * count);
+    const randomBook = await BookModel.findOne().skip(random);
+
+    if (!randomBook) {
+      return res.status(404).send("No books found");
+    }
+
+    return res.status(200).json(randomBook);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).send("Internal server error");
+  }
+};
