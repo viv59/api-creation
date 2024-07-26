@@ -65,7 +65,7 @@ Dillinger uses a number of open source projects to work properly:
 - Testing 
 
 ```sh
-      npm test
+      npm test 
 ```
 
 - Endpoints:
