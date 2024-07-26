@@ -62,6 +62,12 @@ Dillinger uses a number of open source projects to work properly:
       npm run dev
 ```
 
+- Testing 
+
+```sh
+      npm test
+```
+
 - Endpoints:
   Refer to the [API documentation](https://documenter.getpostman.com/view/31981526/2sA3kYhKCU "Postman Documentation") for details on available endpoints, request formats, and responses.
 
